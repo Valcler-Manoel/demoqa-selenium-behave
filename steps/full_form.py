@@ -18,17 +18,37 @@ class DemoqaPage:
 
 @given("the user should be in registration page")
 def demoqa_homepage(context):
+    """
+        Opens the DemoQA site in a Firefox browser, maximizes the window and verifies the actual URL.
+
+        Args:
+            context: A context object that contains information about the current state of the test.
+
+        Raises:
+            AssertionError: If the actual URL does not match the expected URL.
+        """
     context.driver = webdriver.Firefox()
     context.driver.get("https://demoqa.com/automation-practice-form")
     context.driver.maximize_window()
-
-    # Verify the actual URL
     actual_url = context.driver.current_url
     assert actual_url == "https://demoqa.com/automation-practice-form", f"Expected URL: {actual_url}"
 
 
 @when("the user fills in all the form fields")
 def step_impl(context):
+    """
+        Fills in the registration form with valid data.
+
+        This code waits for each form field to be visible, clears any existing input,
+        and then sends new input. selects the subject, checks the checkbox, uploads
+        a profile picture, and selects the state and city.
+
+        Args:
+            context: A context object that contains information about the current state of the test.
+
+        Raises:
+            TimeoutException: If the element is not located within the specified wait time.
+        """
     wait = WebDriverWait(context.driver, 10)
     elem_firstname = wait.until(expected_conditions.presence_of_element_located((By.ID, "firstName")))
     elem_firstname.clear()
@@ -45,20 +65,19 @@ def step_impl(context):
     elem_useremail.send_keys("anderson.silva@gmail.com")
     time.sleep(1)
 
-    # Click on "Male" Button.
+    # Click in gender button
     male_radio_button = WebDriverWait(context.driver, 20).until(
         EC.element_to_be_clickable((By.XPATH, '//label[text()="Male"]'))
     )
     context.driver.execute_script("arguments[0].click();", male_radio_button)
     time.sleep(1)
 
-    # Fill up the phone number
     elem_usernumber = wait.until(expected_conditions.presence_of_element_located((By.ID, "userNumber")))
     elem_usernumber.clear()
     elem_usernumber.send_keys("5585986321")
     time.sleep(1)
 
-    # Date of Birth
+    # Date of birth
     date_of_birth_input = WebDriverWait(context.driver, 10).until(
         EC.element_to_be_clickable((By.ID, 'dateOfBirthInput'))
     )
@@ -100,30 +119,42 @@ def step_impl(context):
     campo_input.send_keys(Keys.TAB)
     time.sleep(1)
 
-    # Choosing a hobby
+    # Hobby selection
     checkbox_label = WebDriverWait(context.driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, "//label[@for='hobbies-checkbox-3']"))
-    )
+        EC.element_to_be_clickable((By.XPATH, "//label[@for='hobbies-checkbox-3']")))
     checkbox_label.click()
 
-    # Uploading a profile picture
+    # Upload picture
     elem_profile_pic = WebDriverWait(context.driver, 10).until(
-        EC.element_to_be_clickable((By.ID, "uploadPicture"))
-    )
+        EC.element_to_be_clickable((By.ID, "uploadPicture")))
     time.sleep(1)
     file_path = os.path.abspath("Astronaut.png")
     elem_profile_pic.send_keys(file_path)
     time.sleep(1)
 
-    # Fill up the current address
+    # Current Address
     elem_useraddress = wait.until(expected_conditions.presence_of_element_located((By.ID, "currentAddress")))
     elem_useraddress.clear()
     elem_useraddress.send_keys("National Capital Region, New Okhla Industrial Development Authority")
     time.sleep(1)
 
+    context.driver.find_element(By.XPATH, '//*[@id="state"]/div/div[1]').click()
+    context.driver.find_element(By.XPATH, "//div[text()='NCR']").click()
+    context.driver.find_element(By.XPATH, '//*[@id="city"]/div/div[1]').click()
+    context.driver.find_element(By.XPATH, "//div[text()='Delhi']").click()
+
 
 @step("he concludes")
 def submit_button(context):
+    """
+        Clicks on the submit button
+
+        Args:
+            context: A context object that contains information about the current state of the test.
+
+        Raises:
+            TimeoutException: If the element is not located within the specified wait time.
+        """
     submit_button = WebDriverWait(context.driver, 10).until(
         EC.element_to_be_clickable((By.ID, "submit"))
     )
@@ -133,10 +164,17 @@ def submit_button(context):
 
 @then("a modal appears with the mirror of the answer")
 def step_impl(context):
+    """
+        Verify if the success message appears
+
+        Args:
+            context: A context object that contains information about the current state of the test.
+
+        Raises:
+            AssertionError: If the message doesn't appear.
+        """
     modal_title = WebDriverWait(context.driver, 10).until(
         EC.visibility_of_element_located((By.ID, "example-modal-sizes-title-lg"))
     )
-
-    # Verify the actual modal title
     assert modal_title.text == "Thanks for submitting the form", f"Expected title: {modal_title.text}"
     context.driver.quit()
