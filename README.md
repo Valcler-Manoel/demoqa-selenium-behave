@@ -15,7 +15,7 @@ To run the tests, simply click on demoqa.feature and run, or simply use the comm
 
 ## Demonstration
 <p align="center">
-  <img src="https://github.com/Valcler-Manoel/demoqa-selenium-behave/assets/91897674/8f615c34-807d-4c6f-a643-18f01d27b7cd">
+  <img src="https://github.com/Valcler-Manoel/demoqa-selenium-behave/assets/91897674/8f615c34-807d-4c6f-a643-18f01d27b7cd" width="700">
 </p>
 
 
