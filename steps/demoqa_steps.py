@@ -45,7 +45,6 @@ def when_user_fills_in_details(context):
 def then_user_should_see_successful_submission(context):
     demoqa_page = DemoqaPage(context.driver)
     demoqa_page.submit_form()
-    # Adicione lógica para verificar se a página foi submetida com sucesso
     time.sleep(3)
 
 
